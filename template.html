@@ -69,39 +69,23 @@ header.intro h1 {
 header.intro p { margin: 0 0 6px; color: var(--muted); font-size: .95rem; }
 header.intro .handle { font-weight: 600; color: var(--accent); text-decoration: none; }
 
-nav.years {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
-  padding: 10px 0;
-  margin-bottom: 8px;
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
-  backdrop-filter: blur(8px);
-  scrollbar-width: none;
-}
-nav.years::-webkit-scrollbar { display: none; }
-nav.years a {
-  flex: none;
-  padding: 5px 12px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  font-size: .82rem;
-  text-decoration: none;
-  color: var(--muted);
-  background: var(--card);
-}
-
-.year { scroll-margin-top: 60px; }
-.year > h2 {
-  margin: 28px 0 14px;
+section > h2 {
+  margin: 34px 0 14px;
   font-size: .82rem;
   font-weight: 600;
   letter-spacing: .12em;
   color: var(--muted);
 }
+
+.music iframe {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 0;
+  border-radius: 14px;
+}
+.music p { margin: 10px 2px 0; font-size: .8rem; color: var(--muted); }
+.music p a { text-decoration: none; }
 
 .posts { display: flex; flex-direction: column; gap: 16px; }
 
@@ -143,13 +127,11 @@ nav.years a {
 .meta a { margin-left: auto; text-decoration: none; }
 .meta a:hover { text-decoration: underline; }
 
+.posts.laid-out { flex-direction: row; align-items: flex-start; }
+.posts .col { flex: 1; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
 @media (min-width: 720px) {
   header.intro h1 { font-size: 1.8rem; }
-  .posts { display: block; columns: 2; column-gap: 16px; }
-  .post { break-inside: avoid; margin-bottom: 16px; }
-}
-@media (min-width: 1040px) {
-  .posts { columns: 3; }
 }
 
 .lightbox {
@@ -218,13 +200,22 @@ footer.foot {
 <header class="intro">
 <h1>村中のお気に入りの投稿</h1>
 <p>{{DESCRIPTION}}</p>
-<p>これまでXに書いたもののうち、自分で読み返したい{{COUNT}}件を並べました。</p>
+<p>Xに書いたもののうち自分で読み返したい{{COUNT}}件と、聴いてきた音楽のプレイリストを置いています。</p>
 <p><a class="handle" href="https://x.com/{{HANDLE}}" target="_blank" rel="noopener">@{{HANDLE}}</a></p>
 </header>
 
-<nav class="years">{{NAV}}</nav>
+<section class="music">
+<h2>音楽</h2>
+<iframe src="https://open.spotify.com/embed/playlist/{{PLAYLIST_ID}}?theme=0" title="Spotify: {{PLAYLIST_NAME}}" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+<p><a href="https://open.spotify.com/playlist/{{PLAYLIST_ID}}" target="_blank" rel="noopener">{{PLAYLIST_NAME}}</a> をSpotifyで開く</p>
+</section>
 
-{{SECTIONS}}
+<section class="feed">
+<h2>投稿</h2>
+<div class="posts">
+{{FEED}}
+</div>
+</section>
 
 <footer class="foot">写真と本文はXの投稿から。最新の投稿は <a href="https://x.com/{{HANDLE}}" target="_blank" rel="noopener">@{{HANDLE}}</a> にあります。</footer>
 </div>
@@ -288,6 +279,40 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') show(cursor - 1);
   if (e.key === 'ArrowRight') show(cursor + 1);
 });
+
+const feed = document.querySelector('.posts');
+const cards = Array.from(feed.children);
+
+function columnCount() {
+  if (window.innerWidth >= 1040) return 3;
+  if (window.innerWidth >= 720) return 2;
+  return 1;
+}
+
+function layout() {
+  const count = columnCount();
+  if (feed.dataset.columns === String(count)) return;
+  feed.dataset.columns = count;
+  feed.classList.toggle('laid-out', count > 1);
+  feed.textContent = '';
+  if (count === 1) {
+    cards.forEach((card) => feed.append(card));
+    return;
+  }
+  const columns = Array.from({ length: count }, () => {
+    const column = document.createElement('div');
+    column.className = 'col';
+    feed.append(column);
+    return column;
+  });
+  cards.forEach((card) => {
+    const shortest = columns.reduce((a, b) => (a.offsetHeight <= b.offsetHeight ? a : b));
+    shortest.append(card);
+  });
+}
+
+layout();
+window.addEventListener('resize', layout);
 
 let touchStartX = 0;
 box.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });

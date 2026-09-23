@@ -1,6 +1,6 @@
 # favorites
 
-Xのお気に入り投稿をまとめた1ページ。GitHub Pages で公開している。
+Xのお気に入り投稿とSpotifyのプレイリストをまとめた1ページ。GitHub Pages で公開している。
 
 https://muranakaaa.github.io/favorites/
 
@@ -9,7 +9,7 @@ https://muranakaaa.github.io/favorites/
 - `posts.json` — 投稿データ（本文・日付・写真のファイル名とサイズ）
 - `images/` — 投稿の写真。`<投稿ID>-<連番>.jpg`
 - `template.html` — ページの雛形。CSS と ライトボックスの JS もここ
-- `build.py` — `posts.json` + `template.html` から `index.html` を生成する
+- `build.py` — `posts.json` + `template.html` から `index.html` を生成する。プレイリストのIDと名前もここ
 
 ## 投稿を足す
 

@@ -10,8 +10,8 @@ SITE_DESCRIPTION = "旅と街歩きの記録。港町・喫茶店・商店街・
 SITE_URL = "https://muranakaaa.github.io/favorites/"
 OGP_IMAGE = "images/2050552757766304211-1.jpg"
 HANDLE = "ayatakaa_chan"
-
-WEEKDAYS = "月火水木金土日"
+PLAYLIST_ID = "2XhVxvRuQOpO572VeJgils"
+PLAYLIST_NAME = "私を構成する42枚（洋楽）"
 
 
 def format_date(iso: str) -> str:
@@ -54,21 +54,11 @@ def render_post(post: dict) -> str:
 </article>"""
 
 
-def render_year(year: str, posts: list) -> str:
-    body = "\n".join(render_post(p) for p in posts)
-    return f'<section class="year" id="y{year}">\n<h2>{year}</h2>\n<div class="posts">\n{body}\n</div>\n</section>'
-
-
 def main() -> None:
     posts = json.loads((ROOT / "posts.json").read_text(encoding="utf-8"))
     posts.sort(key=lambda p: p["date"], reverse=True)
 
-    years: dict[str, list] = {}
-    for post in posts:
-        years.setdefault(post["date"][:4], []).append(post)
-
-    nav = "".join(f'<a href="#y{y}">{y}</a>' for y in years)
-    sections = "\n".join(render_year(y, ps) for y, ps in years.items())
+    feed = "\n".join(render_post(p) for p in posts)
     lightbox_data = json.dumps(
         {p["id"]: [{"src": f"images/{m['file']}", "w": m["w"], "h": m["h"]} for m in p["media"]] for p in posts},
         ensure_ascii=False,
@@ -83,8 +73,9 @@ def main() -> None:
         .replace("{{OGP_IMAGE}}", OGP_IMAGE)
         .replace("{{HANDLE}}", HANDLE)
         .replace("{{COUNT}}", str(len(posts)))
-        .replace("{{NAV}}", nav)
-        .replace("{{SECTIONS}}", sections)
+        .replace("{{PLAYLIST_ID}}", PLAYLIST_ID)
+        .replace("{{PLAYLIST_NAME}}", PLAYLIST_NAME)
+        .replace("{{FEED}}", feed)
         .replace("{{LIGHTBOX_DATA}}", lightbox_data)
     )
     (ROOT / "index.html").write_text(output, encoding="utf-8")
