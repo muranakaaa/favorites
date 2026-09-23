@@ -25,7 +25,7 @@ def block(title: str, body: str) -> str:
     return f"<h3>{html.escape(title)}</h3>\n{body}"
 
 
-def likes(groups: list[dict]) -> str:
+def lists(groups: list[dict]) -> str:
     return "\n".join(block(g["title"], f'<p>{"、".join(html.escape(x) for x in g["items"])}</p>') for g in groups)
 
 
@@ -58,11 +58,10 @@ def links(items: list[dict]) -> str:
 
 
 def music(site: dict) -> str:
-    name = site["playlist_name"]
-    playlist = link(name, f'https://open.spotify.com/playlist/{site["playlist_id"]}')
+    name = html.escape(site["playlist_name"])
     return (
-        f'<p>{html.escape(site["music_note"])}Spotify にプレイリスト「{playlist}」を置いています。</p>'
-        f'<iframe src="https://open.spotify.com/embed/playlist/{site["playlist_id"]}?theme=0" title="Spotify: {html.escape(name)}" loading="lazy" '
+        f'<p>{html.escape(site["music_note"])}</p>'
+        f'<iframe src="https://open.spotify.com/embed/playlist/{site["playlist_id"]}?theme=0" title="Spotify: {name}" loading="lazy" '
         'allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>'
     )
 
@@ -103,10 +102,11 @@ def main() -> None:
             f'<p>{html.escape(site["lead"])}</p>',
             f'<p>{"<br>".join(html.escape(r) for r in site["roles"])}</p>',
             links(site["links"]),
-            likes(site["likes"]),
+            lists(site["likes"]),
             block(POSTS_TITLE, f'<p>X の投稿から選んだ<a href="{POSTS_PAGE}">{len(posts)}件</a>。</p>'),
             block("音楽", music(site)),
             block("ほしいもの", f'<p>{link("Amazon のほしい物リスト", site["wishlist_url"])}</p>'),
+            lists([site["wanted"]]),
         ]
     )
     index = render_page(
