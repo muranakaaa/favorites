@@ -49,11 +49,20 @@ def render_post(post: dict, handle: str) -> str:
     )
 
 
+def link(label: str, url: str) -> str:
+    return f'<a href="{url}" target="_blank" rel="noopener">{html.escape(label)}</a>'
+
+
+def links(items: list[dict]) -> str:
+    return f'<p>{" / ".join(link(x["label"], x["url"]) for x in items)}</p>'
+
+
 def music(site: dict) -> str:
-    name = html.escape(site["playlist_name"])
+    name = site["playlist_name"]
+    playlist = link(name, f'https://open.spotify.com/playlist/{site["playlist_id"]}')
     return (
-        f'<p><a href="https://open.spotify.com/playlist/{site["playlist_id"]}" target="_blank" rel="noopener">{name}</a>（Spotify）</p>'
-        f'<iframe src="https://open.spotify.com/embed/playlist/{site["playlist_id"]}?theme=0" title="Spotify: {name}" loading="lazy" '
+        f'<p>{html.escape(site["music_note"])}Spotify にプレイリスト「{playlist}」を置いています。</p>'
+        f'<iframe src="https://open.spotify.com/embed/playlist/{site["playlist_id"]}?theme=0" title="Spotify: {html.escape(name)}" loading="lazy" '
         'allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>'
     )
 
@@ -93,11 +102,11 @@ def main() -> None:
         [
             f'<p>{html.escape(site["lead"])}</p>',
             f'<p>{"<br>".join(html.escape(r) for r in site["roles"])}</p>',
+            links(site["links"]),
             likes(site["likes"]),
-            block(POSTS_TITLE, f'<p><a href="{POSTS_PAGE}">{len(posts)}件</a></p>'),
+            block(POSTS_TITLE, f'<p>X の投稿から選んだ<a href="{POSTS_PAGE}">{len(posts)}件</a>。</p>'),
             block("音楽", music(site)),
-            block("ほしいもの", f'<p><a href="{site["wishlist_url"]}" target="_blank" rel="noopener">Amazon のほしい物リスト</a></p>'),
-            block("X", f'<p><a href="https://x.com/{site["handle"]}" target="_blank" rel="noopener">@{site["handle"]}</a></p>'),
+            block("ほしいもの", f'<p>{link("Amazon のほしい物リスト", site["wishlist_url"])}</p>'),
         ]
     )
     index = render_page(
@@ -115,8 +124,8 @@ def main() -> None:
     (ROOT / "index.html").write_text(index, encoding="utf-8")
 
     posts_body = (
-        f"<p>X に書いたもののうち、読み返したい{len(posts)}件。日付を押すと元の投稿へ、写真を押すと大きく。"
-        f'<a href="./">{html.escape(site["title"])} に戻る</a></p>'
+        f"<p>X の投稿から選んだ{len(posts)}件。日付を押すと元の投稿が開き、写真を押すと大きく表示します。</p>"
+        f'<p><a href="./">{html.escape(site["title"])} に戻る</a></p>'
         f'<ul class="posts">{"".join(render_post(p, site["handle"]) for p in posts)}</ul>'
     )
     posts_page = render_page(
