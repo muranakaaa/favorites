@@ -1,8 +1,8 @@
-# favorites
+# muranakaaa.github.io
 
 村中の自己紹介ページ（about）。GitHub Pages で公開している。
 
-https://muranakaaa.github.io/favorites/
+https://muranakaaa.github.io/
 
 ## 構成
 

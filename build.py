@@ -92,6 +92,7 @@ def main() -> None:
     top_body = "\n".join(
         [
             f'<p>{html.escape(site["lead"])}</p>',
+            f'<p>{"<br>".join(html.escape(r) for r in site["roles"])}</p>',
             likes(site["likes"]),
             block(POSTS_TITLE, f'<p><a href="{POSTS_PAGE}">{len(posts)}件</a></p>'),
             block("音楽", music(site)),
