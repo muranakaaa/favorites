@@ -1,5 +1,6 @@
-"""data/ と images/ から index.html を生成する。"""
+"""data/ と images/ から index.html と posts.html を生成する。"""
 
+import datetime
 import html
 import json
 import re
@@ -7,6 +8,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 DATA = ROOT / "data"
+POSTS_PAGE = "posts.html"
+POSTS_TITLE = "好きな自分のポスト"
 
 
 def read_json(name: str) -> dict | list:
@@ -24,7 +27,7 @@ def section(slug: str, title: str, body: str) -> str:
 
 def section_likes(groups: list[dict]) -> str:
     return "\n".join(
-        f'<section id="likes-{i}">\n<h2>{html.escape(g["title"])}</h2>\n<p>{"、".join(html.escape(x) for x in g["items"])}</p>\n</section>'
+        section(f"likes-{i}", g["title"], f'<p>{"、".join(html.escape(x) for x in g["items"])}</p>')
         for i, g in enumerate(groups, start=1)
     )
 
@@ -49,11 +52,6 @@ def render_post(post: dict, handle: str) -> str:
     )
 
 
-def section_posts(posts: list[dict], handle: str) -> str:
-    items = "\n".join(render_post(p, handle) for p in posts)
-    return f'<p class="lead">X に書いたもののうち、読み返したい{len(posts)}件。日付を押すと元の投稿へ。</p>\n<ol class="posts">{items}</ol>'
-
-
 def section_music(site: dict) -> str:
     name = html.escape(site["playlist_name"])
     return (
@@ -63,57 +61,84 @@ def section_music(site: dict) -> str:
     )
 
 
-def section_wishlist(site: dict) -> str:
-    return f'<p><a href="{site["wishlist_url"]}" target="_blank" rel="noopener">Amazon のほしい物リスト</a></p>'
+def lightbox_data(posts: list[dict]) -> str:
+    return json.dumps(
+        {p["id"]: [{"src": f"images/{m['file']}", "w": m["w"], "h": m["h"]} for m in p["media"]] for p in posts},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+
+
+def render_page(site: dict, template: str, values: dict[str, str]) -> str:
+    output = template
+    for key, value in {
+        "DESCRIPTION": site["description"],
+        "URL": site["url"],
+        "OGP_IMAGE": site["ogp_image"],
+        "HANDLE": site["handle"],
+        "SINCE": format_date(site["since"]),
+        **values,
+    }.items():
+        output = output.replace("{{" + key + "}}", value)
+    leftover = re.findall(r"{{[A-Z_]+}}", output)
+    if leftover:
+        raise SystemExit(f"未置換のプレースホルダ: {leftover}")
+    return output
 
 
 def main() -> None:
     site = read_json("site.json")
     posts = read_json("posts.json")
     posts.sort(key=lambda p: p["date"], reverse=True)
+    template = (ROOT / "template.html").read_text(encoding="utf-8")
+    updated = datetime.date.today().strftime("%Y.%m.%d")
 
-    body = "\n".join(
-        [
-            section_likes(site["likes"]),
-            section("posts", "旅の投稿", section_posts(posts, site["handle"])),
-            section("music", "音楽", section_music(site)),
-            section("wishlist", "ほしいもの", section_wishlist(site)),
-        ]
-    )
-    toc_items = [(f"likes-{i}", g["title"]) for i, g in enumerate(site["likes"], start=1)] + [
-        ("posts", "旅の投稿"),
+    top_sections = [(f"likes-{i}", g["title"]) for i, g in enumerate(site["likes"], start=1)] + [
+        ("posts", POSTS_TITLE),
         ("music", "音楽"),
         ("wishlist", "ほしいもの"),
     ]
-    toc = "｜".join(f'<a href="#{slug}">{html.escape(title)}</a>' for slug, title in toc_items)
-
-    lightbox_data = json.dumps(
-        {p["id"]: [{"src": f"images/{m['file']}", "w": m["w"], "h": m["h"]} for m in p["media"]] for p in posts},
-        ensure_ascii=False,
-        separators=(",", ":"),
+    top_body = "\n".join(
+        [
+            section_likes(site["likes"]),
+            section("posts", POSTS_TITLE, f'<p><a href="{POSTS_PAGE}">{len(posts)}件を別ページで</a></p>'),
+            section("music", "音楽", section_music(site)),
+            section("wishlist", "ほしいもの", f'<p><a href="{site["wishlist_url"]}" target="_blank" rel="noopener">Amazon のほしい物リスト</a></p>'),
+        ]
     )
+    index = render_page(
+        site,
+        template,
+        {
+            "TITLE": site["title"],
+            "PAGE": "",
+            "H1": site["title"],
+            "LEAD": site["lead"],
+            "UPDATED": f'<p class="updated">最終更新 {updated}</p>',
+            "NAV": "｜".join(f'<a href="#{slug}">{html.escape(title)}</a>' for slug, title in top_sections),
+            "BODY": top_body,
+            "LIGHTBOX_DATA": "{}",
+        },
+    )
+    (ROOT / "index.html").write_text(index, encoding="utf-8")
 
-    output = (ROOT / "template.html").read_text(encoding="utf-8")
-    for key, value in {
-        "TITLE": site["title"],
-        "DESCRIPTION": site["description"],
-        "URL": site["url"],
-        "OGP_IMAGE": site["ogp_image"],
-        "HANDLE": site["handle"],
-        "SINCE": format_date(site["since"]),
-        "LEAD": site["lead"],
-        "TOC": toc,
-        "BODY": body,
-        "LIGHTBOX_DATA": lightbox_data,
-    }.items():
-        output = output.replace("{{" + key + "}}", value)
-
-    leftover = re.findall(r"{{[A-Z_]+}}", output)
-    if leftover:
-        raise SystemExit(f"未置換のプレースホルダ: {leftover}")
-
-    (ROOT / "index.html").write_text(output, encoding="utf-8")
-    print(f"index.html: {len(site['likes'])} lists, {len(posts)} posts")
+    posts_body = f'<ol class="posts">{"".join(render_post(p, site["handle"]) for p in posts)}</ol>'
+    posts_page = render_page(
+        site,
+        template,
+        {
+            "TITLE": f"{POSTS_TITLE}｜{site['title']}",
+            "PAGE": POSTS_PAGE,
+            "H1": POSTS_TITLE,
+            "LEAD": f"X に書いたもののうち、読み返したい{len(posts)}件。日付を押すと元の投稿へ、写真を押すと大きく。",
+            "UPDATED": "",
+            "NAV": f'<a href="./">← {html.escape(site["title"])}</a>',
+            "BODY": posts_body,
+            "LIGHTBOX_DATA": lightbox_data(posts),
+        },
+    )
+    (ROOT / POSTS_PAGE).write_text(posts_page, encoding="utf-8")
+    print(f"index.html: {len(site['likes'])} lists / {POSTS_PAGE}: {len(posts)} posts / 最終更新 {updated}")
 
 
 if __name__ == "__main__":

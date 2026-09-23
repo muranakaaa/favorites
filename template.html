@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{TITLE}}">
 <meta property="og:description" content="{{DESCRIPTION}}">
-<meta property="og:url" content="{{URL}}">
+<meta property="og:url" content="{{URL}}{{PAGE}}">
 <meta property="og:image" content="{{URL}}{{OGP_IMAGE}}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@{{HANDLE}}">
@@ -40,6 +40,7 @@ h1 { font-size: 1.7rem; font-weight: 600; margin: 0 0 4px; letter-spacing: .06em
 .lead { margin: 0 0 6px; }
 .toc { font-size: .9rem; color: var(--muted); margin: 0 0 36px; }
 .toc a { color: var(--muted); }
+.updated { font-size: .82rem; color: var(--muted); font-family: ui-monospace, Menlo, monospace; margin: 0 0 6px; }
 
 section { margin: 0 0 30px; }
 h2 { font-size: 1rem; font-weight: 600; margin: 0 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--rule); letter-spacing: .04em; }
@@ -74,9 +75,10 @@ footer p { margin: 0 0 4px; }
 </head>
 <body>
 <div class="wrap" id="top">
-<h1>{{TITLE}}</h1>
+{{UPDATED}}
+<h1>{{H1}}</h1>
 <p class="lead">{{LEAD}}</p>
-<p class="toc">{{TOC}}</p>
+<p class="toc">{{NAV}}</p>
 
 {{BODY}}
 
