@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{TITLE}}</title>
 <meta name="description" content="{{DESCRIPTION}}">
-<meta name="theme-color" content="#0b1a2e">
+<meta name="theme-color" content="#fbfaf6">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{TITLE}}">
 <meta property="og:description" content="{{DESCRIPTION}}">
@@ -13,224 +13,78 @@
 <meta property="og:image" content="{{URL}}{{OGP_IMAGE}}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@{{HANDLE}}">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚉</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚃</text></svg>">
 <style>
 :root {
-  --bg: #0b1a2e;
-  --panel: #10233d;
-  --panel-2: #14325a;
-  --line: #2a4a70;
-  --text: #f2eee6;
-  --muted: #a9b7c9;
-  --link: #ffb347;
-  --visited: #e0954a;
-  --led: #ff9d00;
-  --sign-bg: #f7f6f1;
-  --sign-text: #14181f;
-  --sign-line: #0b6b3a;
-  --board: #0a121f;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --bg: #fbfaf6;
+  --text: #1d1c1a;
+  --muted: #6d6a64;
+  --rule: #d9d5cc;
+  --link: #1f4e79;
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--bg);
-  background-image: repeating-linear-gradient(0deg, transparent 0 3px, rgba(255, 255, 255, .012) 3px 4px);
   color: var(--text);
-  font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
-  font-size: 15px;
-  line-height: 1.8;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: 16px;
+  line-height: 1.9;
   overflow-wrap: anywhere;
 }
-a { color: var(--link); }
-a:visited { color: var(--visited); }
-.num, time, .counter { font-family: var(--mono); }
-h3 { font-size: 1.02rem; margin: 26px 0 8px; padding-left: 10px; border-left: 4px solid var(--link); line-height: 1.4; }
-p { margin: 0 0 12px; }
-.small { font-size: .82rem; color: var(--muted); }
-.wip { color: var(--muted); }
-.wip::before { content: "🚧 "; }
+a { color: var(--link); text-decoration: underline; text-underline-offset: .15em; }
+.wrap { max-width: 640px; margin: 0 auto; padding: 40px 20px calc(60px + env(safe-area-inset-bottom)); }
 
-.wrap { max-width: 860px; margin: 0 auto; padding: 18px 14px calc(56px + env(safe-area-inset-bottom)); }
+h1 { font-size: 1.7rem; font-weight: 600; margin: 0 0 4px; letter-spacing: .06em; }
+.lead { margin: 0 0 6px; }
+.toc { font-size: .9rem; color: var(--muted); margin: 0 0 36px; }
+.toc a { color: var(--muted); }
 
-/* 駅名標 */
-.sign {
-  background: var(--sign-bg);
-  color: var(--sign-text);
-  border-radius: 8px;
-  border: 3px solid #1d2430;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
-}
-.sign .main { padding: 22px 18px 12px; text-align: center; }
-.sign .kana { font-size: clamp(2rem, 9vw, 3.4rem); font-weight: 700; letter-spacing: .12em; line-height: 1.1; }
-.sign .sub { display: flex; justify-content: center; gap: 18px; margin-top: 8px; font-size: .95rem; }
-.sign .romaji { font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase; }
-.sign .stripe { height: 10px; background: var(--sign-line); }
-.sign .neighbors {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 14px;
-  background: #17405f;
-  color: #fff;
-  font-size: .92rem;
-}
-.sign .neighbors small { display: block; font-family: var(--mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
-.sign .neighbors .prev .k::before { content: "◀ "; }
-.sign .neighbors .next { text-align: right; }
-.sign .neighbors .next .k::after { content: " ▶"; }
-.sign .address { font-size: .75rem; text-align: center; color: #cfd8e3; background: #0f2a45; padding: 4px; font-family: var(--mono); letter-spacing: .1em; }
+section { margin: 0 0 30px; }
+h2 { font-size: 1rem; font-weight: 600; margin: 0 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--rule); letter-spacing: .04em; }
+p { margin: 0 0 8px; }
 
-/* 電光掲示板 */
-.led {
-  margin-top: 14px;
-  background: #050505;
-  border: 3px solid #1e2632;
-  border-radius: 4px;
-  padding: 6px 0;
-  overflow: hidden;
-  white-space: nowrap;
-  color: var(--led);
-  font-family: var(--mono);
-  font-size: .95rem;
-  text-shadow: 0 0 6px rgba(255, 157, 0, .55);
-}
-.led span { display: inline-block; padding-left: 100%; animation: led 28s linear infinite; }
-@keyframes led { to { transform: translateX(-100%); } }
+.posts { list-style: none; padding: 0; margin: 0; }
+.posts li { padding: 14px 0; border-bottom: 1px dotted var(--rule); }
+.posts time { display: block; font-size: .82rem; font-family: ui-monospace, Menlo, monospace; color: var(--muted); margin-bottom: 2px; }
+.posts time a { color: var(--muted); text-decoration: none; }
+.posts time a:hover { text-decoration: underline; }
+.posts p { margin: 0; }
+.thumbs { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.shot { padding: 0; margin: 0; border: 0; background: none; cursor: zoom-in; line-height: 0; }
+.shot img { width: 72px; height: 72px; object-fit: cover; display: block; border: 1px solid var(--rule); }
 
-/* カウンター */
-.counter {
-  text-align: center;
-  margin: 14px 0 4px;
-  font-size: .82rem;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.counter .digits { display: inline-flex; gap: 2px; vertical-align: middle; margin: 0 4px; }
-.since { text-align: center; margin: 0 0 8px; font-size: .78rem; color: var(--muted); font-family: var(--mono); }
-.counter .digits b { display: inline-block; min-width: 1.1em; padding: 1px 3px; background: #000; color: #dfe; border: 1px solid #333; text-align: center; font-weight: 400; }
+iframe { display: block; width: 100%; height: 152px; border: 0; margin-top: 6px; }
 
-.tagline { text-align: center; color: var(--muted); font-size: .9rem; margin: 6px 0 22px; }
+footer { margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: .85rem; color: var(--muted); }
+footer p { margin: 0 0 4px; }
 
-/* ご案内板 */
-.guide {
-  background: var(--board);
-  border: 2px solid var(--line);
-  border-top: 8px solid var(--link);
-  padding: 14px 16px 10px;
-  margin-bottom: 26px;
-}
-.guide h2 { margin: 0 0 8px; font-size: .95rem; letter-spacing: .3em; color: var(--muted); text-align: center; }
-.guide ol { list-style: none; padding: 0; margin: 0; columns: 1; }
-.guide li { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-top: 1px dashed var(--line); }
-.guide li a { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; }
-.guide li a:hover { text-decoration: underline; }
-.guide .num { display: inline-flex; align-items: center; justify-content: center; width: 1.6em; height: 1.6em; border-radius: 50%; background: var(--link); color: var(--bg); font-size: .8rem; font-weight: 700; flex: none; }
-.guide .note { margin-left: auto; color: var(--muted); font-size: .78rem; text-align: right; }
-@media (min-width: 600px) { .guide ol { columns: 2; column-gap: 24px; } .guide li { break-inside: avoid; } }
-
-/* 番線 */
-.platform { margin-top: 34px; scroll-margin-top: 12px; }
-.platform > h2 {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0 0 14px;
-  padding: 10px 14px;
-  background: var(--board);
-  border: 2px solid var(--line);
-  border-left: 8px solid var(--link);
-  font-size: 1.05rem;
-  line-height: 1.4;
-}
-.platform > h2 .num { display: inline-flex; align-items: center; justify-content: center; min-width: 2em; height: 2em; border-radius: 50%; background: var(--link); color: var(--bg); font-size: .85rem; font-weight: 700; }
-.platform > h2 .note { margin-left: auto; color: var(--muted); font-size: .76rem; font-weight: 400; text-align: right; }
-.platform > h2 .note::before { content: ""; }
-
-/* 投稿 */
-.posts { display: flex; flex-direction: column; gap: 14px; }
-.post { background: var(--panel); border: 1px solid var(--line); padding: 14px; }
-.post .text { margin: 0; }
-.post .text:empty { display: none; }
-.media { display: grid; gap: 6px; margin-top: 12px; }
-.media.m2, .media.m4, .media.m3 { grid-template-columns: 1fr 1fr; }
-.media.m3 .shot:first-child { grid-column: 1 / -1; }
-.shot { display: block; padding: 0; margin: 0; border: 0; background: none; cursor: zoom-in; line-height: 0; }
-.shot img { width: 100%; height: auto; display: block; background: var(--line); border: 3px solid #f2eee6; }
-.media.m2 .shot img, .media.m4 .shot img, .media.m3 .shot:not(:first-child) img { aspect-ratio: 1 / 1; object-fit: cover; }
-.meta { display: flex; align-items: center; gap: 14px; margin-top: 10px; font-size: .78rem; color: var(--muted); }
-.meta a { margin-left: auto; text-decoration: none; }
-.meta a:hover { text-decoration: underline; }
-
-/* 音楽 */
-.platform iframe { display: block; width: 100%; height: 380px; border: 0; margin-bottom: 8px; }
-
-/* 興味関心・ほしいもの */
-.tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.tags li { border: 1px solid var(--line); background: var(--panel); padding: 2px 10px; font-size: .82rem; }
-a.button { display: inline-block; padding: 10px 16px; border: 2px solid var(--link); text-decoration: none; font-weight: 600; }
-a.button:hover { background: var(--link); color: var(--bg); }
-
-/* 足元 */
-footer.foot { margin-top: 44px; padding-top: 16px; border-top: 2px solid var(--line); font-size: .8rem; color: var(--muted); text-align: center; }
-footer.foot p { margin: 4px 0; }
-.banner { display: inline-block; margin-top: 10px; width: 200px; height: 40px; background: var(--sign-bg); color: var(--sign-text); border: 2px solid #1d2430; font-weight: 700; letter-spacing: .15em; line-height: 36px; font-size: .95rem; text-decoration: none; position: relative; }
-.banner::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--sign-line); }
-.totop { position: fixed; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); width: 42px; height: 42px; border-radius: 50%; background: var(--link); color: var(--bg); display: flex; align-items: center; justify-content: center; text-decoration: none; font-weight: 700; box-shadow: 0 4px 12px rgba(0, 0, 0, .4); }
-
-/* 写真の全画面 */
-.lightbox { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; background: rgba(3, 6, 12, .95); touch-action: pan-y; }
+.lightbox { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; background: rgba(20, 20, 18, .95); touch-action: pan-y; }
 .lightbox[open] { display: flex; }
 .lightbox img { max-width: 100vw; max-height: 100dvh; object-fit: contain; }
-.lightbox button { position: absolute; border: 0; background: rgba(255, 255, 255, .14); color: #fff; border-radius: 50%; cursor: pointer; font-size: 1.2rem; line-height: 1; }
+.lightbox button { position: absolute; border: 0; background: rgba(255, 255, 255, .15); color: #fff; border-radius: 50%; cursor: pointer; font-size: 1.2rem; line-height: 1; }
 .lightbox .close { top: calc(12px + env(safe-area-inset-top)); right: 12px; width: 40px; height: 40px; }
 .lightbox .prev, .lightbox .next { top: 50%; transform: translateY(-50%); width: 44px; height: 44px; }
 .lightbox .prev { left: 10px; }
 .lightbox .next { right: 10px; }
-.lightbox .count { position: absolute; bottom: calc(16px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); color: rgba(255, 255, 255, .8); font-size: .8rem; font-family: var(--mono); }
+.lightbox .count { position: absolute; bottom: calc(16px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); color: rgba(255, 255, 255, .8); font-size: .8rem; font-family: ui-monospace, Menlo, monospace; }
 .lightbox[data-single="1"] .prev, .lightbox[data-single="1"] .next, .lightbox[data-single="1"] .count { display: none; }
 </style>
 </head>
 <body>
 <div class="wrap" id="top">
+<h1>{{TITLE}}</h1>
+<p class="lead">{{LEAD}}</p>
+<p class="toc">{{TOC}}</p>
 
-<header class="sign" aria-label="駅名標">
-<div class="main">
-<div class="kana">{{STATION_KANA}}</div>
-<div class="sub"><span>{{STATION_KANJI}}</span><span class="romaji">{{STATION_ROMAJI}}</span></div>
-</div>
-<div class="stripe"></div>
-<div class="neighbors">
-<div class="prev"><span class="k">{{PREV_KANA}}</span><small>{{PREV_ROMAJI}}</small></div>
-<div class="next"><span class="k">{{NEXT_KANA}}</span><small>{{NEXT_ROMAJI}}</small></div>
-</div>
-<div class="address">{{ADDRESS}}</div>
-</header>
+{{BODY}}
 
-<div class="led" aria-label="お知らせ"><span>{{NOTICE}}</span></div>
-
-<p class="counter">あなたは<span class="digits" id="visits"><b>0</b><b>0</b><b>0</b><b>1</b></span>回目の訪問です</p>
-<p class="since">since {{SINCE}}</p>
-<p class="tagline">{{DESCRIPTION}}</p>
-
-<nav class="guide" aria-label="ご案内">
-<h2>ご案内</h2>
-<ol>{{TOC}}</ol>
-</nav>
-
-{{SECTIONS}}
-
-<footer class="foot">
-<p>写真と本文は X の投稿から。最新の投稿は <a href="https://x.com/{{HANDLE}}" target="_blank" rel="noopener">@{{HANDLE}}</a> にあります。</p>
-<p>推奨環境: スマートフォン縦持ち。パソコンでも読めます。</p>
-<a class="banner" href="#top">{{STATION_KANA}}</a>
-<p>since {{SINCE}}</p>
+<footer>
+<p>X: <a href="https://x.com/{{HANDLE}}" target="_blank" rel="noopener">@{{HANDLE}}</a></p>
+<p>since {{SINCE}} ／ <a href="#top">上へ</a></p>
 </footer>
 </div>
-
-<a class="totop" href="#top" aria-label="上へ">▲</a>
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="写真">
 <img id="lb-img" alt="">
@@ -298,14 +152,6 @@ box.addEventListener('touchend', (e) => {
   const dx = e.changedTouches[0].clientX - touchStartX;
   if (Math.abs(dx) > 50) show(cursor + (dx < 0 ? 1 : -1));
 }, { passive: true });
-
-try {
-  const key = 'visits';
-  const visits = Number(localStorage.getItem(key) || 0) + 1;
-  localStorage.setItem(key, String(visits));
-  const digits = String(Math.min(visits, 9999)).padStart(4, '0').split('');
-  document.getElementById('visits').innerHTML = digits.map((d) => `<b>${d}</b>`).join('');
-} catch (_) {}
 </script>
 </body>
 </html>
