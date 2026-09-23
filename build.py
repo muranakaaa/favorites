@@ -21,15 +21,12 @@ def format_date(iso: str) -> str:
     return f"{year}.{int(month):02d}.{int(day):02d}"
 
 
-def section(slug: str, title: str, body: str) -> str:
-    return f'<section id="{slug}">\n<h2>{html.escape(title)}</h2>\n{body}\n</section>'
+def block(title: str, body: str) -> str:
+    return f"<h3>{html.escape(title)}</h3>\n{body}"
 
 
-def section_likes(groups: list[dict]) -> str:
-    return "\n".join(
-        section(f"likes-{i}", g["title"], f'<p>{"、".join(html.escape(x) for x in g["items"])}</p>')
-        for i, g in enumerate(groups, start=1)
-    )
+def likes(groups: list[dict]) -> str:
+    return "\n".join(block(g["title"], f'<p>{"、".join(html.escape(x) for x in g["items"])}</p>') for g in groups)
 
 
 def render_thumbs(post: dict) -> str:
@@ -47,12 +44,12 @@ def render_post(post: dict, handle: str) -> str:
     url = f"https://x.com/{handle}/status/{post['id']}"
     text = html.escape(post["text"]).replace("\n", "<br>")
     return (
-        f'<li><time datetime="{post["date"]}"><a href="{url}" target="_blank" rel="noopener">{format_date(post["date"])}</a></time>'
+        f'<li><h3><a href="{url}" target="_blank" rel="noopener">{format_date(post["date"])}</a></h3>'
         f"<p>{text}</p>{render_thumbs(post)}</li>"
     )
 
 
-def section_music(site: dict) -> str:
+def music(site: dict) -> str:
     name = html.escape(site["playlist_name"])
     return (
         f'<p><a href="https://open.spotify.com/playlist/{site["playlist_id"]}" target="_blank" rel="noopener">{name}</a>（Spotify）</p>'
@@ -69,6 +66,13 @@ def lightbox_data(posts: list[dict]) -> str:
     )
 
 
+def nav(site: dict, current: str) -> str:
+    pages = [("", site["title"]), (POSTS_PAGE, POSTS_TITLE)]
+    return "".join(
+        f'<li{" class=current" if page == current else ""}><a href="./{page}">{html.escape(label)}</a></li>' for page, label in pages
+    )
+
+
 def render_page(site: dict, template: str, values: dict[str, str]) -> str:
     output = template
     for key, value in {
@@ -76,7 +80,6 @@ def render_page(site: dict, template: str, values: dict[str, str]) -> str:
         "URL": site["url"],
         "OGP_IMAGE": site["ogp_image"],
         "HANDLE": site["handle"],
-        "SINCE": format_date(site["since"]),
         **values,
     }.items():
         output = output.replace("{{" + key + "}}", value)
@@ -93,17 +96,14 @@ def main() -> None:
     template = (ROOT / "template.html").read_text(encoding="utf-8")
     updated = datetime.date.today().strftime("%Y.%m.%d")
 
-    top_sections = [(f"likes-{i}", g["title"]) for i, g in enumerate(site["likes"], start=1)] + [
-        ("posts", POSTS_TITLE),
-        ("music", "音楽"),
-        ("wishlist", "ほしいもの"),
-    ]
     top_body = "\n".join(
         [
-            section_likes(site["likes"]),
-            section("posts", POSTS_TITLE, f'<p><a href="{POSTS_PAGE}">{len(posts)}件を別ページで</a></p>'),
-            section("music", "音楽", section_music(site)),
-            section("wishlist", "ほしいもの", f'<p><a href="{site["wishlist_url"]}" target="_blank" rel="noopener">Amazon のほしい物リスト</a></p>'),
+            f'<p>{html.escape(site["lead"])}</p>',
+            likes(site["likes"]),
+            block(POSTS_TITLE, f'<p><a href="{POSTS_PAGE}">{len(posts)}件</a></p>'),
+            block("音楽", music(site)),
+            block("ほしいもの", f'<p><a href="{site["wishlist_url"]}" target="_blank" rel="noopener">Amazon のほしい物リスト</a></p>'),
+            block("X", f'<p><a href="https://x.com/{site["handle"]}" target="_blank" rel="noopener">@{site["handle"]}</a></p>'),
         ]
     )
     index = render_page(
@@ -112,27 +112,30 @@ def main() -> None:
         {
             "TITLE": site["title"],
             "PAGE": "",
+            "PAGE_HREF": "./",
             "H1": site["title"],
-            "LEAD": site["lead"],
             "UPDATED": f'<p class="updated">最終更新 {updated}</p>',
-            "NAV": "｜".join(f'<a href="#{slug}">{html.escape(title)}</a>' for slug, title in top_sections),
+            "NAV": nav(site, ""),
             "BODY": top_body,
             "LIGHTBOX_DATA": "{}",
         },
     )
     (ROOT / "index.html").write_text(index, encoding="utf-8")
 
-    posts_body = f'<ol class="posts">{"".join(render_post(p, site["handle"]) for p in posts)}</ol>'
+    posts_body = (
+        f"<p>X に書いたもののうち、読み返したい{len(posts)}件。日付を押すと元の投稿へ、写真を押すと大きく。</p>"
+        f'<ul class="posts">{"".join(render_post(p, site["handle"]) for p in posts)}</ul>'
+    )
     posts_page = render_page(
         site,
         template,
         {
             "TITLE": f"{POSTS_TITLE}｜{site['title']}",
             "PAGE": POSTS_PAGE,
+            "PAGE_HREF": POSTS_PAGE,
             "H1": POSTS_TITLE,
-            "LEAD": f"X に書いたもののうち、読み返したい{len(posts)}件。日付を押すと元の投稿へ、写真を押すと大きく。",
             "UPDATED": "",
-            "NAV": f'<a href="./">← {html.escape(site["title"])}</a>',
+            "NAV": nav(site, POSTS_PAGE),
             "BODY": posts_body,
             "LIGHTBOX_DATA": lightbox_data(posts),
         },
