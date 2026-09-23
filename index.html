@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>むらなか</title>
+<title>about</title>
 <meta name="description" content="旅と街歩きの記録。港町・喫茶店・商店街・ローカル線。">
 <meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="website">
-<meta property="og:title" content="むらなか">
+<meta property="og:title" content="about">
 <meta property="og:description" content="旅と街歩きの記録。港町・喫茶店・商店街・ローカル線。">
 <meta property="og:url" content="https://muranakaaa.github.io/favorites/">
 <meta property="og:image" content="https://muranakaaa.github.io/favorites/images/2050552757766304211-1.jpg">
@@ -40,27 +40,7 @@ h3::before { content: "# "; color: #ccc; margin-right: 4px; }
 p { margin: 0 0 12px; }
 .updated { color: #999; font-size: 14px; margin: 0 0 4px; }
 
-/* 左端のナビ。触ると開く */
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 5px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, .2);
-  z-index: 10;
-  display: none;
-}
-header:hover, header:focus-within { width: 332px; background: #fff; box-shadow: 4px 0 24px rgba(0, 0, 0, .08); }
-header > div { width: 300px; margin: 32px 16px; opacity: 0; }
-header:hover > div, header:focus-within > div { opacity: 1; }
-header ul { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0 0 0 18px; }
-header li { display: flex; position: relative; padding: 2px 0; }
-header a { color: #666; font-weight: 600; }
-header li.current::before { content: ""; position: absolute; left: -36px; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: #df51a8; }
 @media (min-width: 720px) {
-  header { display: block; }
   .page { margin: 40px 56px; }
 }
 
@@ -73,8 +53,6 @@ header li.current::before { content: ""; position: absolute; left: -36px; top: 8
 .shot img { width: 72px; height: 72px; object-fit: cover; display: block; border: 1px solid rgba(0, 0, 0, .1); }
 
 iframe { display: block; width: 100%; max-width: 480px; height: 152px; border: 0; margin: 0 0 12px; }
-
-footer { margin: 20px 0 0; padding: 10px 0 0; border-top: 1px solid rgba(0, 0, 0, .2); font-size: 14px; line-height: 1.6; }
 
 .lightbox { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; background: rgba(20, 20, 20, .95); touch-action: pan-y; }
 .lightbox[open] { display: flex; }
@@ -89,20 +67,17 @@ footer { margin: 20px 0 0; padding: 10px 0 0; border-top: 1px solid rgba(0, 0, 0
 </style>
 </head>
 <body>
-<header><div><ul><li class=current><a href="./">むらなか</a></li><li><a href="./posts.html">好きな自分のポスト</a></li></ul></div></header>
-<div class="page" id="top">
+<div class="page">
 <p class="updated">最終更新 2026.09.23</p>
-<h1>むらなか</h1>
+<h1>about</h1>
 <main>
 <p>大阪市在住。関西発の旅と街歩きの記録。</p>
 <h3>好きなもの</h3>
 <p>港町、喫茶店、ローカル線、商店街、温泉、銭湯、ゲストハウス、深夜散歩、昭和レトロ、建築、日本酒、海鮮、名産品、レコード</p>
-<h3>よく出没する場所</h3>
-<p>三重県尾鷲市（九鬼）、島根県津和野、愛媛県松野町、四万十川、鹿児島県下甑島、青森県八甲田、宮崎県青島、稚内、名古屋の大須、大阪の都島、ボローニャ</p>
+<h3>好きな場所</h3>
+<p>三重県尾鷲市、大阪市（福島〜梅田〜天満〜京橋）、徳島県三好市、山口県萩市、宮崎県宮崎市</p>
 <h3>好きな食べ物</h3>
 <p>スパイスカレー、ホットケーキ、焼鳥、つくばのラーメン、おひつのご飯、甘夏</p>
-<h3>旅のしかた</h3>
-<p>宿は当日の朝に決める、移動中は音楽を聴く、「それ撮る意味ある？」と言われそうな風景を撮る、おっ、と思う看板は撮影する</p>
 <h3>好きな自分のポスト</h3>
 <p><a href="posts.html">46件</a></p>
 <h3>音楽</h3>
@@ -112,7 +87,6 @@ footer { margin: 20px 0 0; padding: 10px 0 0; border-top: 1px solid rgba(0, 0, 0
 <h3>X</h3>
 <p><a href="https://x.com/ayatakaa_chan" target="_blank" rel="noopener">@ayatakaa_chan</a></p>
 </main>
-<footer>現在のページ：<a href="./">むらなか（/）</a>｜<a href="./">トップページ</a> – <a href="#top">ページ上部</a></footer>
 </div>
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="写真">

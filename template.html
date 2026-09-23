@@ -40,27 +40,7 @@ h3::before { content: "# "; color: #ccc; margin-right: 4px; }
 p { margin: 0 0 12px; }
 .updated { color: #999; font-size: 14px; margin: 0 0 4px; }
 
-/* 左端のナビ。触ると開く */
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 5px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, .2);
-  z-index: 10;
-  display: none;
-}
-header:hover, header:focus-within { width: 332px; background: #fff; box-shadow: 4px 0 24px rgba(0, 0, 0, .08); }
-header > div { width: 300px; margin: 32px 16px; opacity: 0; }
-header:hover > div, header:focus-within > div { opacity: 1; }
-header ul { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0 0 0 18px; }
-header li { display: flex; position: relative; padding: 2px 0; }
-header a { color: #666; font-weight: 600; }
-header li.current::before { content: ""; position: absolute; left: -36px; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: #df51a8; }
 @media (min-width: 720px) {
-  header { display: block; }
   .page { margin: 40px 56px; }
 }
 
@@ -73,8 +53,6 @@ header li.current::before { content: ""; position: absolute; left: -36px; top: 8
 .shot img { width: 72px; height: 72px; object-fit: cover; display: block; border: 1px solid rgba(0, 0, 0, .1); }
 
 iframe { display: block; width: 100%; max-width: 480px; height: 152px; border: 0; margin: 0 0 12px; }
-
-footer { margin: 20px 0 0; padding: 10px 0 0; border-top: 1px solid rgba(0, 0, 0, .2); font-size: 14px; line-height: 1.6; }
 
 .lightbox { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; background: rgba(20, 20, 20, .95); touch-action: pan-y; }
 .lightbox[open] { display: flex; }
@@ -89,14 +67,12 @@ footer { margin: 20px 0 0; padding: 10px 0 0; border-top: 1px solid rgba(0, 0, 0
 </style>
 </head>
 <body>
-<header><div><ul>{{NAV}}</ul></div></header>
-<div class="page" id="top">
+<div class="page">
 {{UPDATED}}
 <h1>{{H1}}</h1>
 <main>
 {{BODY}}
 </main>
-<footer>現在のページ：<a href="{{PAGE_HREF}}">{{H1}}（/{{PAGE}}）</a>｜<a href="./">トップページ</a> – <a href="#top">ページ上部</a></footer>
 </div>
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="写真">

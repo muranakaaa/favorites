@@ -66,13 +66,6 @@ def lightbox_data(posts: list[dict]) -> str:
     )
 
 
-def nav(site: dict, current: str) -> str:
-    pages = [("", site["title"]), (POSTS_PAGE, POSTS_TITLE)]
-    return "".join(
-        f'<li{" class=current" if page == current else ""}><a href="./{page}">{html.escape(label)}</a></li>' for page, label in pages
-    )
-
-
 def render_page(site: dict, template: str, values: dict[str, str]) -> str:
     output = template
     for key, value in {
@@ -112,10 +105,8 @@ def main() -> None:
         {
             "TITLE": site["title"],
             "PAGE": "",
-            "PAGE_HREF": "./",
             "H1": site["title"],
             "UPDATED": f'<p class="updated">最終更新 {updated}</p>',
-            "NAV": nav(site, ""),
             "BODY": top_body,
             "LIGHTBOX_DATA": "{}",
         },
@@ -123,19 +114,18 @@ def main() -> None:
     (ROOT / "index.html").write_text(index, encoding="utf-8")
 
     posts_body = (
-        f"<p>X に書いたもののうち、読み返したい{len(posts)}件。日付を押すと元の投稿へ、写真を押すと大きく。</p>"
+        f"<p>X に書いたもののうち、読み返したい{len(posts)}件。日付を押すと元の投稿へ、写真を押すと大きく。"
+        f'<a href="./">{html.escape(site["title"])} に戻る</a></p>'
         f'<ul class="posts">{"".join(render_post(p, site["handle"]) for p in posts)}</ul>'
     )
     posts_page = render_page(
         site,
         template,
         {
-            "TITLE": f"{POSTS_TITLE}｜{site['title']}",
+            "TITLE": POSTS_TITLE,
             "PAGE": POSTS_PAGE,
-            "PAGE_HREF": POSTS_PAGE,
             "H1": POSTS_TITLE,
             "UPDATED": "",
-            "NAV": nav(site, POSTS_PAGE),
             "BODY": posts_body,
             "LIGHTBOX_DATA": lightbox_data(posts),
         },
