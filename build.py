@@ -12,6 +12,7 @@ OGP_IMAGE = "images/2050552757766304211-1.jpg"
 HANDLE = "ayatakaa_chan"
 PLAYLIST_ID = "2XhVxvRuQOpO572VeJgils"
 PLAYLIST_NAME = "私を構成する42枚（洋楽）"
+WISHLIST_URL = "https://www.amazon.jp/hz/wishlist/ls/2XVETO9L9BGLQ"
 
 
 def format_date(iso: str) -> str:
@@ -75,6 +76,7 @@ def main() -> None:
         .replace("{{COUNT}}", str(len(posts)))
         .replace("{{PLAYLIST_ID}}", PLAYLIST_ID)
         .replace("{{PLAYLIST_NAME}}", PLAYLIST_NAME)
+        .replace("{{WISHLIST_URL}}", WISHLIST_URL)
         .replace("{{FEED}}", feed)
         .replace("{{LIGHTBOX_DATA}}", lightbox_data)
     )

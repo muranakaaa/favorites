@@ -87,6 +87,21 @@ section > h2 {
 .music p { margin: 10px 2px 0; font-size: .8rem; color: var(--muted); }
 .music p a { text-decoration: none; }
 
+.wishlist a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
+}
+.wishlist strong { font-weight: 600; font-size: .95rem; }
+.wishlist span { margin-left: auto; color: var(--accent); font-size: .85rem; }
+
 .posts { display: flex; flex-direction: column; gap: 16px; }
 
 .post {
@@ -200,7 +215,7 @@ footer.foot {
 <header class="intro">
 <h1>村中のお気に入りの投稿</h1>
 <p>旅と街歩きの記録。港町・喫茶店・商店街・ローカル線。</p>
-<p>Xに書いたもののうち自分で読み返したい46件と、聴いてきた音楽のプレイリストを置いています。</p>
+<p>Xに書いたもののうち自分で読み返したい46件と、聴いてきた音楽、ほしいものを置いています。</p>
 <p><a class="handle" href="https://x.com/ayatakaa_chan" target="_blank" rel="noopener">@ayatakaa_chan</a></p>
 </header>
 
@@ -208,6 +223,11 @@ footer.foot {
 <h2>音楽</h2>
 <iframe src="https://open.spotify.com/embed/playlist/2XhVxvRuQOpO572VeJgils?theme=0" title="Spotify: 私を構成する42枚（洋楽）" loading="lazy" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
 <p><a href="https://open.spotify.com/playlist/2XhVxvRuQOpO572VeJgils" target="_blank" rel="noopener">私を構成する42枚（洋楽）</a> をSpotifyで開く</p>
+</section>
+
+<section class="wishlist">
+<h2>ほしいもの</h2>
+<a href="https://www.amazon.jp/hz/wishlist/ls/2XVETO9L9BGLQ" target="_blank" rel="noopener"><strong>Amazonのほしい物リスト</strong><span>開く →</span></a>
 </section>
 
 <section class="feed">
