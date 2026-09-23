@@ -106,7 +106,7 @@ def main() -> None:
             block(POSTS_TITLE, f'<p>X の投稿から選んだ<a href="{POSTS_PAGE}">{len(posts)}件</a>。</p>'),
             block("音楽", music(site)),
             block("ほしいもの", f'<p>{link("Amazon のほしい物リスト", site["wishlist_url"])}</p>'),
-            lists([site["wanted"]]),
+            lists([site["dreams"], site["wanted"]]),
         ]
     )
     index = render_page(
