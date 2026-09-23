@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>村中のお気に入りの投稿</title>
+<meta name="description" content="旅と街歩きの記録。港町・喫茶店・商店街・ローカル線。">
+<meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="村中のお気に入りの投稿">
+<meta property="og:description" content="旅と街歩きの記録。港町・喫茶店・商店街・ローカル線。">
+<meta property="og:url" content="https://muranakaaa.github.io/favorites/">
+<meta property="og:image" content="https://muranakaaa.github.io/favorites/images/2050552757766304211-1.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ayatakaa_chan">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚃</text></svg>">
+<style>
+:root {
+  --bg: #faf8f5;
+  --card: #ffffff;
+  --line: #e7e1d8;
+  --text: #23201c;
+  --muted: #7a7268;
+  --accent: #9a6b4a;
+  --shadow: 0 1px 2px rgba(35, 32, 28, .05), 0 6px 16px rgba(35, 32, 28, .05);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14130f;
+    --card: #1e1c18;
+    --line: #322e28;
+    --text: #e9e4db;
+    --muted: #9b9287;
+    --accent: #d7a173;
+    --shadow: none;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+a { color: var(--accent); }
+
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px calc(64px + env(safe-area-inset-bottom));
+}
+
+header.intro {
+  padding: 56px 0 28px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px;
+}
+header.intro h1 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  letter-spacing: .02em;
+}
+header.intro p { margin: 0 0 6px; color: var(--muted); font-size: .95rem; }
+header.intro .handle { font-weight: 600; color: var(--accent); text-decoration: none; }
+
+nav.years {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 10px 0;
+  margin-bottom: 8px;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  scrollbar-width: none;
+}
+nav.years::-webkit-scrollbar { display: none; }
+nav.years a {
+  flex: none;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: .82rem;
+  text-decoration: none;
+  color: var(--muted);
+  background: var(--card);
+}
+
+.year { scroll-margin-top: 60px; }
+.year > h2 {
+  margin: 28px 0 14px;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  color: var(--muted);
+}
+
+.posts { display: flex; flex-direction: column; gap: 16px; }
+
+.post {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.post .text { margin: 0; font-size: 1rem; }
+.post .text:empty { display: none; }
+
+.media { display: grid; gap: 4px; margin-top: 14px; border-radius: 10px; overflow: hidden; }
+.media.m2, .media.m4 { grid-template-columns: 1fr 1fr; }
+.media.m3 { grid-template-columns: 1fr 1fr; }
+.media.m3 .shot:first-child { grid-column: 1 / -1; }
+.shot {
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  line-height: 0;
+}
+.shot img { width: 100%; height: auto; display: block; background: var(--line); }
+.media.m2 .shot img, .media.m4 .shot img { aspect-ratio: 1 / 1; object-fit: cover; }
+.media.m3 .shot:not(:first-child) img { aspect-ratio: 1 / 1; object-fit: cover; }
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+  font-size: .8rem;
+  color: var(--muted);
+}
+.meta a { margin-left: auto; text-decoration: none; }
+.meta a:hover { text-decoration: underline; }
+
+@media (min-width: 720px) {
+  header.intro h1 { font-size: 1.8rem; }
+  .posts { display: block; columns: 2; column-gap: 16px; }
+  .post { break-inside: avoid; margin-bottom: 16px; }
+}
+@media (min-width: 1040px) {
+  .posts { columns: 3; }
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 9, 7, .94);
+  touch-action: pan-y;
+}
+.lightbox[open] { display: flex; }
+.lightbox img {
+  max-width: 100vw;
+  max-height: 100dvh;
+  object-fit: contain;
+}
+.lightbox button {
+  position: absolute;
+  border: 0;
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.lightbox .close {
+  top: calc(12px + env(safe-area-inset-top));
+  right: 12px;
+  width: 40px;
+  height: 40px;
+}
+.lightbox .prev, .lightbox .next {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+}
+.lightbox .prev { left: 10px; }
+.lightbox .next { right: 10px; }
+.lightbox .count {
+  position: absolute;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, .8);
+  font-size: .8rem;
+}
+.lightbox[data-single="1"] .prev,
+.lightbox[data-single="1"] .next,
+.lightbox[data-single="1"] .count { display: none; }
+
+footer.foot {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: .82rem;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="intro">
+<h1>村中のお気に入りの投稿</h1>
+<p>旅と街歩きの記録。港町・喫茶店・商店街・ローカル線。</p>
+<p>これまでXに書いたもののうち、自分で読み返したい46件を並べました。</p>
+<p><a class="handle" href="https://x.com/ayatakaa_chan" target="_blank" rel="noopener">@ayatakaa_chan</a></p>
+</header>
+
+<nav class="years"><a href="#y2026">2026</a><a href="#y2025">2025</a><a href="#y2024">2024</a><a href="#y2023">2023</a><a href="#y2022">2022</a><a href="#y2021">2021</a></nav>
+
+<section class="year" id="y2026">
+<h2>2026</h2>
+<div class="posts">
+<article class="post">
+<p class="text">大阪でお気に入りの店、都島にあるスパイスカレーミルズ！<br>「前来たときにいた〇〇さん、元気にしてます？」と聞いたら、「いま奥の部屋にいますよw 寝てますね」とのことだった。<br>最高だな〜と思ってたら、隣の人（スタッフ）が冷蔵庫で冷やしてたブドウ食べていいよって分けてくれてさらに最高だった</p>
+<div class="media m1"><button class="shot" type="button" data-post="2099078746292846879" data-index="0"><img src="images/2099078746292846879-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-09-13">2026年9月13日</time>
+<a href="https://x.com/ayatakaa_chan/status/2099078746292846879" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">大阪に住んで感動したのは、西の空が広く、夕焼けの時間が長いこと。<br>三重や関東に住んでいたときは、西側に山があったせいか、日が沈むとあっという間に真っ暗になっていた（その分、朝は綺麗に光が差し込んだ）。<br>大阪は夕焼けの街。</p>
+<div class="media m1"><button class="shot" type="button" data-post="2055952113843483111" data-index="0"><img src="images/2055952113843483111-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-05-17">2026年5月17日</time>
+<a href="https://x.com/ayatakaa_chan/status/2055952113843483111" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">6泊7日の四国旅は無事完走しました。<br>南海フェリーで徳島港を去り和歌山港に降り立つと、オレンジ色の夕焼けにすべてが染まっていて、ただでさえ強い旅情をさらに掻き立てられた。<br>今の感情もいずれ思い出になってしまうのだろうか。さよならありがとう</p>
+<div class="media m4"><button class="shot" type="button" data-post="2052311988781695477" data-index="0"><img src="images/2052311988781695477-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2052311988781695477" data-index="1"><img src="images/2052311988781695477-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2052311988781695477" data-index="2"><img src="images/2052311988781695477-3.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2052311988781695477" data-index="3"><img src="images/2052311988781695477-4.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-05-07">2026年5月7日</time>
+<a href="https://x.com/ayatakaa_chan/status/2052311988781695477" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">誰かと一緒の旅行なら移動中は会話をひたすら楽しむけど、一人旅なら音楽を聴いていることが多い。<br>あとで旅が終わって聴き返したときに「この曲聴くとあのときの旅を思い出すな〜」ってなる感覚が好きで好きで。<br>それを作り出すために旅の最中に音楽を聴いているといってもいい。</p>
+
+<footer class="meta">
+<time datetime="2026-05-07">2026年5月7日</time>
+<a href="https://x.com/ayatakaa_chan/status/2052334437933969685" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">南海フェリーで徳島を去った。<br>振り返って思うに、今回の四国旅は、旅行というより放浪というにふさわしかった。寝る前に翌朝の、当日の朝にその夜の予定を立てる。宿も取らず、その日の天気や風の強さに合わせて、寝る場所さえも直前まで決めない旅だった。</p>
+<div class="media m1"><button class="shot" type="button" data-post="2052048372996153804" data-index="0"><img src="images/2052048372996153804-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-05-06">2026年5月6日</time>
+<a href="https://x.com/ayatakaa_chan/status/2052048372996153804" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">暗闇に俺を置いていったバスは、山奥へと消えていった。あれが本日最終のバスである。<br>スマホのライトで足元を照らさないとまともに歩けないほど暗い。</p>
+<div class="media m2"><button class="shot" type="button" data-post="2051640659048898718" data-index="0"><img src="images/2051640659048898718-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2051640659048898718" data-index="1"><img src="images/2051640659048898718-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-05-05">2026年5月5日</time>
+<a href="https://x.com/ayatakaa_chan/status/2051640659048898718" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">四国の山奥の険しい自然に、コンクリートの人工物が適応しようともがき、年月を経て風景に馴染んでいく。<br>今や力強い美しさとなっている。</p>
+<div class="media m4"><button class="shot" type="button" data-post="2051233618492882972" data-index="0"><img src="images/2051233618492882972-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2051233618492882972" data-index="1"><img src="images/2051233618492882972-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2051233618492882972" data-index="2"><img src="images/2051233618492882972-3.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2051233618492882972" data-index="3"><img src="images/2051233618492882972-4.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-05-04">2026年5月4日</time>
+<a href="https://x.com/ayatakaa_chan/status/2051233618492882972" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">四万十川沿いにて、宿を立てた。</p>
+<div class="media m1"><button class="shot" type="button" data-post="2050692800140939614" data-index="0"><img src="images/2050692800140939614-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-05-02">2026年5月2日</time>
+<a href="https://x.com/ayatakaa_chan/status/2050692800140939614" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">道に迷って立ち往生してたら、地元の方が声をかけてくれて案内までしてくれたんだけど、まさかの町長さんだった…！笑<br>愛媛県松野町ありがとう！！</p>
+<div class="media m1"><button class="shot" type="button" data-post="2050552757766304211" data-index="0"><img src="images/2050552757766304211-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-05-02">2026年5月2日</time>
+<a href="https://x.com/ayatakaa_chan/status/2050552757766304211" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">尾鷲で甘夏収穫してます！楽しい！</p>
+<div class="media m3"><button class="shot" type="button" data-post="2048217299505787382" data-index="0"><img src="images/2048217299505787382-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2048217299505787382" data-index="1"><img src="images/2048217299505787382-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2048217299505787382" data-index="2"><img src="images/2048217299505787382-3.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-04-26">2026年4月26日</time>
+<a href="https://x.com/ayatakaa_chan/status/2048217299505787382" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">尾鷲の古民家の庭でバーベキューです！</p>
+<div class="media m1"><button class="shot" type="button" data-post="2048351856875978967" data-index="0"><img src="images/2048351856875978967-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-04-26">2026年4月26日</time>
+<a href="https://x.com/ayatakaa_chan/status/2048351856875978967" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">人生という旅の途中、節目を迎えました。<br>大学の卒業式で意気投合した関西好きの妻とこれからの旅路を楽しみます。</p>
+<div class="media m1"><button class="shot" type="button" data-post="2036435600409239879" data-index="0"><img src="images/2036435600409239879-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-03-24">2026年3月24日</time>
+<a href="https://x.com/ayatakaa_chan/status/2036435600409239879" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">雰囲気 気分<br>ムード 趣<br>印象 残像<br>残響</p>
+<div class="media m4"><button class="shot" type="button" data-post="2035707230079840764" data-index="0"><img src="images/2035707230079840764-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2035707230079840764" data-index="1"><img src="images/2035707230079840764-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2035707230079840764" data-index="2"><img src="images/2035707230079840764-3.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2035707230079840764" data-index="3"><img src="images/2035707230079840764-4.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-03-22">2026年3月22日</time>
+<a href="https://x.com/ayatakaa_chan/status/2035707230079840764" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">昨晩は憧れの丸福樓（旧任天堂本社社屋）に宿泊。積年の憧れと溶け合う夢の時間でした。</p>
+<div class="media m4"><button class="shot" type="button" data-post="2035359068664316307" data-index="0"><img src="images/2035359068664316307-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2035359068664316307" data-index="1"><img src="images/2035359068664316307-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2035359068664316307" data-index="2"><img src="images/2035359068664316307-3.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2035359068664316307" data-index="3"><img src="images/2035359068664316307-4.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-03-21">2026年3月21日</time>
+<a href="https://x.com/ayatakaa_chan/status/2035359068664316307" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">三重県尾鷲市九鬼<br>何度も足を運んで歩いた地域なので、集落の入り組んだ路地も今はもう身体が先に覚えています</p>
+<div class="media m4"><button class="shot" type="button" data-post="2015736929980236161" data-index="0"><img src="images/2015736929980236161-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2015736929980236161" data-index="1"><img src="images/2015736929980236161-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2015736929980236161" data-index="2"><img src="images/2015736929980236161-3.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="2015736929980236161" data-index="3"><img src="images/2015736929980236161-4.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2026-01-26">2026年1月26日</time>
+<a href="https://x.com/ayatakaa_chan/status/2015736929980236161" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+</div>
+</section>
+<section class="year" id="y2025">
+<h2>2025</h2>
+<div class="posts">
+<article class="post">
+<p class="text">旅をしていた当時の情景を思い出したくなったとき用に、「それ撮る意味ある？」と言われそうな風景の写真を撮っておく</p>
+<div class="media m1"><button class="shot" type="button" data-post="1958508866745844224" data-index="0"><img src="images/1958508866745844224-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2025-08-21">2025年8月21日</time>
+<a href="https://x.com/ayatakaa_chan/status/1958508866745844224" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">宿の人たちと自己紹介しながらの食卓<br>旅好きの集まりでした</p>
+<div class="media m1"><button class="shot" type="button" data-post="1951931890086096923" data-index="0"><img src="images/1951931890086096923-1.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2025-08-03">2025年8月3日</time>
+<a href="https://x.com/ayatakaa_chan/status/1951931890086096923" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">旅は、行きたいと思った時に行くべきだよ。<br>仕事がとか、家庭がとか、社会情勢がとか、そんなことよりも、自分の気持が「行かない理由」になる前に。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1934970569176539344" data-index="0"><img src="images/1934970569176539344-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2025-06-17">2025年6月17日</time>
+<a href="https://x.com/ayatakaa_chan/status/1934970569176539344" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">イタリアのボローニャという街に来ているが、期待を上回っている。ポルティコと呼ばれる雁木が街中に張り巡らされており、これが機能的で美しく、この街の個性を際立たせている。時間が許すまで街を歩き回ってこよう。</p>
+<div class="media m4"><button class="shot" type="button" data-post="1926603392278790268" data-index="0"><img src="images/1926603392278790268-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1926603392278790268" data-index="1"><img src="images/1926603392278790268-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1926603392278790268" data-index="2"><img src="images/1926603392278790268-3.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1926603392278790268" data-index="3"><img src="images/1926603392278790268-4.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2025-05-25">2025年5月25日</time>
+<a href="https://x.com/ayatakaa_chan/status/1926603392278790268" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">転職前の最後の長期休暇を利用して、海外へ一人旅に行ってきます。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1924296000153452689" data-index="0"><img src="images/1924296000153452689-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2025-05-19">2025年5月19日</time>
+<a href="https://x.com/ayatakaa_chan/status/1924296000153452689" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">おっ、と思う看板は撮影する。<br>今年も、これからも大事にしていきたい習慣だ。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1878433538107932876" data-index="0"><img src="images/1878433538107932876-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2025-01-12">2025年1月12日</time>
+<a href="https://x.com/ayatakaa_chan/status/1878433538107932876" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+</div>
+</section>
+<section class="year" id="y2024">
+<h2>2024</h2>
+<div class="posts">
+<article class="post">
+<p class="text">雪国にありがちな広めの待合室、好き。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1859747677845774548" data-index="0"><img src="images/1859747677845774548-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2024-11-21">2024年11月21日</time>
+<a href="https://x.com/ayatakaa_chan/status/1859747677845774548" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">おひつのご飯で始まる朝は良い…</p>
+<div class="media m1"><button class="shot" type="button" data-post="1769194519776608764" data-index="0"><img src="images/1769194519776608764-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2024-03-17">2024年3月17日</time>
+<a href="https://x.com/ayatakaa_chan/status/1769194519776608764" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+</div>
+</section>
+<section class="year" id="y2023">
+<h2>2023</h2>
+<div class="posts">
+<article class="post">
+<p class="text">尾鷲の純喫茶で写真撮ってもらいました</p>
+<div class="media m1"><button class="shot" type="button" data-post="1703907550910136800" data-index="0"><img src="images/1703907550910136800-1.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-09-18">2023年9月18日</time>
+<a href="https://x.com/ayatakaa_chan/status/1703907550910136800" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">名古屋の大須でレコードプレーヤーとスピーカーを買っちゃった。3DSを買ってもらった小学生の時みたいにワクワクしている。いや、さすがにその時には負けるか。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1647418955613765632" data-index="0"><img src="images/1647418955613765632-1.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-04-16">2023年4月16日</time>
+<a href="https://x.com/ayatakaa_chan/status/1647418955613765632" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">数年後にも自分がまだ旅をしているかどうかは分からないけど、車窓から海を見て黄昏るのは時々やっててほしい</p>
+<div class="media m1"><button class="shot" type="button" data-post="1640295575613747200" data-index="0"><img src="images/1640295575613747200-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-27">2023年3月27日</time>
+<a href="https://x.com/ayatakaa_chan/status/1640295575613747200" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">ホットケーキを食べに来ました</p>
+<div class="media m1"><button class="shot" type="button" data-post="1639495235964383234" data-index="0"><img src="images/1639495235964383234-1.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-25">2023年3月25日</time>
+<a href="https://x.com/ayatakaa_chan/status/1639495235964383234" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">僕が喫茶店巡りを始めるきっかけになったお店に来た。同じ空間さえ次第に意味が変わってく。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1639485393556099073" data-index="0"><img src="images/1639485393556099073-1.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-25">2023年3月25日</time>
+<a href="https://x.com/ayatakaa_chan/status/1639485393556099073" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">筑波大学、卒業しました！<br>やりたいことは全部やった！悔いはない！</p>
+<div class="media m1"><button class="shot" type="button" data-post="1639257776647208960" data-index="0"><img src="images/1639257776647208960-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-24">2023年3月24日</time>
+<a href="https://x.com/ayatakaa_chan/status/1639257776647208960" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">つくばで1番好きなラーメン屋に最後に行けて、良かったーーーーーー。</p>
+<div class="media m2"><button class="shot" type="button" data-post="1639260443863658497" data-index="0"><img src="images/1639260443863658497-1.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1639260443863658497" data-index="1"><img src="images/1639260443863658497-2.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-24">2023年3月24日</time>
+<a href="https://x.com/ayatakaa_chan/status/1639260443863658497" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">青島には5時間ほど滞在した。<br>散歩したりベンチに座ったりしてた。<br>日本で行ってみたい場所は大体行ったから、気に入った場所をゆっくり楽しもうと思う</p>
+<div class="media m1"><button class="shot" type="button" data-post="1637355717572321283" data-index="0"><img src="images/1637355717572321283-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-19">2023年3月19日</time>
+<a href="https://x.com/ayatakaa_chan/status/1637355717572321283" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">学割と書いた乗車券を発行できるのも最後。まだ学生でいたいという思いは微塵もないのに泣きそうになる…</p>
+<div class="media m1"><button class="shot" type="button" data-post="1637585261243830272" data-index="0"><img src="images/1637585261243830272-1.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-19">2023年3月19日</time>
+<a href="https://x.com/ayatakaa_chan/status/1637585261243830272" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">あり得たかもしれない人生を擬似体験できるのが、旅の醍醐味の一つ。<br>日南線の車窓から、福島高松駅の駅舎を見て、ここが自宅の最寄駅の人生だったら…と妄想した。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1636599124551405568" data-index="0"><img src="images/1636599124551405568-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-17">2023年3月17日</time>
+<a href="https://x.com/ayatakaa_chan/status/1636599124551405568" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">毎日が退屈なので、今日は意味もなくビジホに泊まりに来ました。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1633798056620756992" data-index="0"><img src="images/1633798056620756992-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-09">2023年3月9日</time>
+<a href="https://x.com/ayatakaa_chan/status/1633798056620756992" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">大学5年間、どうでもいいことをひたすら勉強しまくってきた。そのどうでもいいことが役に立つ瞬間はほぼ毎日ある。「あれ無駄だったなー」と思ってることも、いつか役にたつ瞬間がくるはず。そう思うとやる気が出る。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1632028116565766144" data-index="0"><img src="images/1632028116565766144-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-04">2023年3月4日</time>
+<a href="https://x.com/ayatakaa_chan/status/1632028116565766144" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">家庭的な民宿で家庭的な夕食をいただいた。鹿児島県薩摩川内市下甑町長浜。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1631287558767517696" data-index="0"><img src="images/1631287558767517696-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-03-02">2023年3月2日</time>
+<a href="https://x.com/ayatakaa_chan/status/1631287558767517696" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">青森県の八甲田ロープウェーやばいw<br>この大雪でも運行されてるのもはや感動</p>
+<div class="media m3"><button class="shot" type="button" data-post="1625428912057749505" data-index="0"><img src="images/1625428912057749505-1.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1625428912057749505" data-index="1"><img src="images/1625428912057749505-2.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1625428912057749505" data-index="2"><img src="images/1625428912057749505-3.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-02-14">2023年2月14日</time>
+<a href="https://x.com/ayatakaa_chan/status/1625428912057749505" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">津和野駅で途中下車<br>三文字地名に惹かれる</p>
+<div class="media m1"><button class="shot" type="button" data-post="1620322214104170497" data-index="0"><img src="images/1620322214104170497-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-01-31">2023年1月31日</time>
+<a href="https://x.com/ayatakaa_chan/status/1620322214104170497" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">島根県西部に来ている。<br>去年行った1人旅の中でも島根は格別だった。島根の旅の思い出がすごく印象に残っていて、今回まんまとリピートしてしまった。歴史好き、ローカル好き、海好き、西日本好き、の僕にとって島根はぶっ刺さる。</p>
+<div class="media m1"><button class="shot" type="button" data-post="1620242539604512768" data-index="0"><img src="images/1620242539604512768-1.jpg" width="900" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-01-31">2023年1月31日</time>
+<a href="https://x.com/ayatakaa_chan/status/1620242539604512768" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">JR四日市駅と雰囲気が激似じゃない？</p>
+<div class="media m4"><button class="shot" type="button" data-post="1620379997553987584" data-index="0"><img src="images/1620379997553987584-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1620379997553987584" data-index="1"><img src="images/1620379997553987584-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1620379997553987584" data-index="2"><img src="images/1620379997553987584-3.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1620379997553987584" data-index="3"><img src="images/1620379997553987584-4.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2023-01-31">2023年1月31日</time>
+<a href="https://x.com/ayatakaa_chan/status/1620379997553987584" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+</div>
+</section>
+<section class="year" id="y2022">
+<h2>2022</h2>
+<div class="posts">
+<article class="post">
+<p class="text">理想のバス停だ…</p>
+<div class="media m1"><button class="shot" type="button" data-post="1590942326159183873" data-index="0"><img src="images/1590942326159183873-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2022-11-11">2022年11月11日</time>
+<a href="https://x.com/ayatakaa_chan/status/1590942326159183873" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">ローカル線の旅を趣味に見つけれて本当よかった……じゃないとこんな景色、見ることなかっただろうに…</p>
+<div class="media m1"><button class="shot" type="button" data-post="1591189198782234626" data-index="0"><img src="images/1591189198782234626-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2022-11-11">2022年11月11日</time>
+<a href="https://x.com/ayatakaa_chan/status/1591189198782234626" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">今までたくさん旅行してきて、旅の興味関心のジャンルも増えた。歴史遺跡、喫茶店、乗り鉄、歓楽街、商業施設、街灯、地方経済…。それらの共通点を考えるに、自分は「人の営み」に興味があるんだなって思う。いま目の前に存在するものは、どんな人たちがどんな考えで作り上げ、どう評価されているのか</p>
+
+<footer class="meta">
+<time datetime="2022-10-16">2022年10月16日</time>
+<a href="https://x.com/ayatakaa_chan/status/1581714060617592832" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">日本最北端のマクドナルドについに来たぞ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！教祖様万歳🙌</p>
+<div class="media m1"><button class="shot" type="button" data-post="1532291461722800128" data-index="0"><img src="images/1532291461722800128-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2022-06-02">2022年6月2日</time>
+<a href="https://x.com/ayatakaa_chan/status/1532291461722800128" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+<article class="post">
+<p class="text">旅のルーティンが僕にはある。それは「音楽のプレイリストを作る」こと。<br><br>移動中にその音楽を聴きまくっておくと、旅が終わってから聴き返した時に「あ〜この曲を聴くとあの時の旅を思い出すなあ」という気分になれて最高。</p>
+<div class="media m3"><button class="shot" type="button" data-post="1531422715626008577" data-index="0"><img src="images/1531422715626008577-1.jpg" width="675" height="1200" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1531422715626008577" data-index="1"><img src="images/1531422715626008577-2.jpg" width="675" height="1200" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1531422715626008577" data-index="2"><img src="images/1531422715626008577-3.jpg" width="675" height="1200" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2022-05-30">2022年5月30日</time>
+<a href="https://x.com/ayatakaa_chan/status/1531422715626008577" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+</div>
+</section>
+<section class="year" id="y2021">
+<h2>2021</h2>
+<div class="posts">
+<article class="post">
+<p class="text">焼鳥屋に関してはルッキズム主義。店の外観で美味さがわかる</p>
+<div class="media m2"><button class="shot" type="button" data-post="1346407860041760774" data-index="0"><img src="images/1346407860041760774-1.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button><button class="shot" type="button" data-post="1346407860041760774" data-index="1"><img src="images/1346407860041760774-2.jpg" width="1200" height="900" loading="lazy" decoding="async" alt=""></button></div>
+<footer class="meta">
+<time datetime="2021-01-05">2021年1月5日</time>
+<a href="https://x.com/ayatakaa_chan/status/1346407860041760774" target="_blank" rel="noopener">Xで見る</a>
+</footer>
+</article>
+</div>
+</section>
+
+<footer class="foot">写真と本文はXの投稿から。最新の投稿は <a href="https://x.com/ayatakaa_chan" target="_blank" rel="noopener">@ayatakaa_chan</a> にあります。</footer>
+</div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="写真">
+<img id="lb-img" alt="">
+<button class="close" type="button" aria-label="閉じる">✕</button>
+<button class="prev" type="button" aria-label="前の写真">‹</button>
+<button class="next" type="button" aria-label="次の写真">›</button>
+<span class="count" id="lb-count"></span>
+</div>
+
+<script>
+const MEDIA = {"2099078746292846879":[{"src":"images/2099078746292846879-1.jpg","w":1200,"h":900}],"2055952113843483111":[{"src":"images/2055952113843483111-1.jpg","w":1200,"h":900}],"2052311988781695477":[{"src":"images/2052311988781695477-1.jpg","w":1200,"h":900},{"src":"images/2052311988781695477-2.jpg","w":1200,"h":900},{"src":"images/2052311988781695477-3.jpg","w":1200,"h":900},{"src":"images/2052311988781695477-4.jpg","w":1200,"h":900}],"2052334437933969685":[],"2052048372996153804":[{"src":"images/2052048372996153804-1.jpg","w":1200,"h":900}],"2051640659048898718":[{"src":"images/2051640659048898718-1.jpg","w":1200,"h":900},{"src":"images/2051640659048898718-2.jpg","w":1200,"h":900}],"2051233618492882972":[{"src":"images/2051233618492882972-1.jpg","w":1200,"h":900},{"src":"images/2051233618492882972-2.jpg","w":1200,"h":900},{"src":"images/2051233618492882972-3.jpg","w":1200,"h":900},{"src":"images/2051233618492882972-4.jpg","w":1200,"h":900}],"2050692800140939614":[{"src":"images/2050692800140939614-1.jpg","w":1200,"h":900}],"2050552757766304211":[{"src":"images/2050552757766304211-1.jpg","w":1200,"h":900}],"2048217299505787382":[{"src":"images/2048217299505787382-1.jpg","w":1200,"h":900},{"src":"images/2048217299505787382-2.jpg","w":1200,"h":900},{"src":"images/2048217299505787382-3.jpg","w":1200,"h":900}],"2048351856875978967":[{"src":"images/2048351856875978967-1.jpg","w":1200,"h":900}],"2036435600409239879":[{"src":"images/2036435600409239879-1.jpg","w":1200,"h":900}],"2035707230079840764":[{"src":"images/2035707230079840764-1.jpg","w":1200,"h":900},{"src":"images/2035707230079840764-2.jpg","w":1200,"h":900},{"src":"images/2035707230079840764-3.jpg","w":1200,"h":900},{"src":"images/2035707230079840764-4.jpg","w":1200,"h":900}],"2035359068664316307":[{"src":"images/2035359068664316307-1.jpg","w":1200,"h":900},{"src":"images/2035359068664316307-2.jpg","w":1200,"h":900},{"src":"images/2035359068664316307-3.jpg","w":1200,"h":900},{"src":"images/2035359068664316307-4.jpg","w":1200,"h":900}],"2015736929980236161":[{"src":"images/2015736929980236161-1.jpg","w":1200,"h":900},{"src":"images/2015736929980236161-2.jpg","w":1200,"h":900},{"src":"images/2015736929980236161-3.jpg","w":1200,"h":900},{"src":"images/2015736929980236161-4.jpg","w":1200,"h":900}],"1958508866745844224":[{"src":"images/1958508866745844224-1.jpg","w":1200,"h":900}],"1951931890086096923":[{"src":"images/1951931890086096923-1.jpg","w":900,"h":1200}],"1934970569176539344":[{"src":"images/1934970569176539344-1.jpg","w":1200,"h":900}],"1926603392278790268":[{"src":"images/1926603392278790268-1.jpg","w":1200,"h":900},{"src":"images/1926603392278790268-2.jpg","w":1200,"h":900},{"src":"images/1926603392278790268-3.jpg","w":1200,"h":900},{"src":"images/1926603392278790268-4.jpg","w":1200,"h":900}],"1924296000153452689":[{"src":"images/1924296000153452689-1.jpg","w":1200,"h":900}],"1878433538107932876":[{"src":"images/1878433538107932876-1.jpg","w":1200,"h":900}],"1859747677845774548":[{"src":"images/1859747677845774548-1.jpg","w":1200,"h":900}],"1769194519776608764":[{"src":"images/1769194519776608764-1.jpg","w":1200,"h":900}],"1703907550910136800":[{"src":"images/1703907550910136800-1.jpg","w":900,"h":1200}],"1647418955613765632":[{"src":"images/1647418955613765632-1.jpg","w":900,"h":1200}],"1640295575613747200":[{"src":"images/1640295575613747200-1.jpg","w":1200,"h":900}],"1639495235964383234":[{"src":"images/1639495235964383234-1.jpg","w":900,"h":1200}],"1639485393556099073":[{"src":"images/1639485393556099073-1.jpg","w":900,"h":1200}],"1639257776647208960":[{"src":"images/1639257776647208960-1.jpg","w":1200,"h":900}],"1639260443863658497":[{"src":"images/1639260443863658497-1.jpg","w":900,"h":1200},{"src":"images/1639260443863658497-2.jpg","w":900,"h":1200}],"1637355717572321283":[{"src":"images/1637355717572321283-1.jpg","w":1200,"h":900}],"1637585261243830272":[{"src":"images/1637585261243830272-1.jpg","w":900,"h":1200}],"1636599124551405568":[{"src":"images/1636599124551405568-1.jpg","w":1200,"h":900}],"1633798056620756992":[{"src":"images/1633798056620756992-1.jpg","w":1200,"h":900}],"1632028116565766144":[{"src":"images/1632028116565766144-1.jpg","w":1200,"h":900}],"1631287558767517696":[{"src":"images/1631287558767517696-1.jpg","w":1200,"h":900}],"1625428912057749505":[{"src":"images/1625428912057749505-1.jpg","w":900,"h":1200},{"src":"images/1625428912057749505-2.jpg","w":900,"h":1200},{"src":"images/1625428912057749505-3.jpg","w":900,"h":1200}],"1620322214104170497":[{"src":"images/1620322214104170497-1.jpg","w":1200,"h":900}],"1620242539604512768":[{"src":"images/1620242539604512768-1.jpg","w":900,"h":1200}],"1620379997553987584":[{"src":"images/1620379997553987584-1.jpg","w":1200,"h":900},{"src":"images/1620379997553987584-2.jpg","w":1200,"h":900},{"src":"images/1620379997553987584-3.jpg","w":1200,"h":900},{"src":"images/1620379997553987584-4.jpg","w":1200,"h":900}],"1590942326159183873":[{"src":"images/1590942326159183873-1.jpg","w":1200,"h":900}],"1591189198782234626":[{"src":"images/1591189198782234626-1.jpg","w":1200,"h":900}],"1581714060617592832":[],"1532291461722800128":[{"src":"images/1532291461722800128-1.jpg","w":1200,"h":900}],"1531422715626008577":[{"src":"images/1531422715626008577-1.jpg","w":675,"h":1200},{"src":"images/1531422715626008577-2.jpg","w":675,"h":1200},{"src":"images/1531422715626008577-3.jpg","w":675,"h":1200}],"1346407860041760774":[{"src":"images/1346407860041760774-1.jpg","w":1200,"h":900},{"src":"images/1346407860041760774-2.jpg","w":1200,"h":900}]};
+const box = document.getElementById('lightbox');
+const boxImg = document.getElementById('lb-img');
+const boxCount = document.getElementById('lb-count');
+let shots = [];
+let cursor = 0;
+
+function show(i) {
+  cursor = (i + shots.length) % shots.length;
+  const shot = shots[cursor];
+  boxImg.src = shot.src;
+  boxImg.width = shot.w;
+  boxImg.height = shot.h;
+  boxCount.textContent = `${cursor + 1} / ${shots.length}`;
+}
+
+function openBox(postId, index) {
+  shots = MEDIA[postId] || [];
+  if (!shots.length) return;
+  box.dataset.single = shots.length === 1 ? '1' : '0';
+  box.setAttribute('open', '');
+  document.body.style.overflow = 'hidden';
+  show(index);
+}
+
+function closeBox() {
+  box.removeAttribute('open');
+  document.body.style.overflow = '';
+  boxImg.removeAttribute('src');
+}
+
+document.addEventListener('click', (e) => {
+  const shot = e.target.closest('.shot');
+  if (shot) openBox(shot.dataset.post, Number(shot.dataset.index));
+});
+
+box.addEventListener('click', (e) => {
+  const button = e.target.closest('button');
+  if (!button) { closeBox(); return; }
+  if (button.classList.contains('close')) closeBox();
+  if (button.classList.contains('prev')) show(cursor - 1);
+  if (button.classList.contains('next')) show(cursor + 1);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (!box.hasAttribute('open')) return;
+  if (e.key === 'Escape') closeBox();
+  if (e.key === 'ArrowLeft') show(cursor - 1);
+  if (e.key === 'ArrowRight') show(cursor + 1);
+});
+
+let touchStartX = 0;
+box.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+box.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) show(cursor + (dx < 0 ? 1 : -1));
+}, { passive: true });
+</script>
+</body>
+</html>
