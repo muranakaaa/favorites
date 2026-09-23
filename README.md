@@ -1,20 +1,20 @@
 # favorites
 
-村中の自己紹介ページ「むらなか待合室」。GitHub Pages で公開している。
+村中の自己紹介ページ（about）。GitHub Pages で公開している。
 
 https://muranakaaa.github.io/favorites/
 
 ## 構成
 
-- `data/site.json` — サイト名・駅名標・お知らせ・自己紹介・興味関心・プレイリスト・ほしい物リスト
+- `data/site.json` — タイトル・冒頭の1行・「好きな○○」の各リスト・プレイリスト・ほしい物リスト
 - `data/posts.json` — Xの投稿（本文・日付・写真のファイル名とサイズ）
 - `images/` — 投稿の写真。`<投稿ID>-<連番>.jpg`
-- `template.html` — ページの雛形。CSS と JS（写真の全画面表示・訪問カウンター）もここ
-- `build.py` — `data/` と `template.html` から `index.html` を生成する
+- `template.html` — 両ページ共通の雛形。CSS と写真の全画面表示の JS もここ
+- `build.py` — `data/` と `template.html` から `index.html`（about）と `posts.html`（好きな自分のポスト）を生成する。最終更新日は実行日
 
 ## 更新する
 
-1. `data/` の該当ファイルを書き換える。番線の追加・順序は `build.py` の `platforms`
+1. `data/site.json` か `data/posts.json` を書き換える。項目の追加・順序は `build.py` の `top_body`
 2. `python3 build.py`
 3. commit して push する。Pages が `main` の `/` をそのまま配信する
 
