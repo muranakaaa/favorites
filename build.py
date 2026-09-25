@@ -104,8 +104,8 @@ def main() -> None:
     top_body = "\n".join(
         [
             f'<p>{html.escape(site["name"])}。{html.escape(site["lead"])}</p>',
-            timeline(site["history"]),
-            timeline(site["roles"]),
+            block("住んだ場所", timeline(site["history"])),
+            block("肩書き", timeline(site["roles"])),
             links(site["links"]),
             block("仕事", f'<p>{html.escape(site["job"])}</p>'),
             lists(site["likes"]),
