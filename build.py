@@ -102,6 +102,7 @@ def main() -> None:
             f'<p>{html.escape(site["lead"])}</p>',
             f'<p>{"<br>".join(html.escape(r) for r in site["roles"])}</p>',
             links(site["links"]),
+            block("仕事", f'<p>{html.escape(site["job"])}</p>'),
             lists(site["likes"]),
             block(POSTS_TITLE, f'<p>X の投稿から選んだ<a href="{POSTS_PAGE}">{len(posts)}件</a>。</p>'),
             block("音楽", music(site)),
