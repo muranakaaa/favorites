@@ -25,6 +25,10 @@ def block(title: str, body: str) -> str:
     return f"<h3>{html.escape(title)}</h3>\n{body}"
 
 
+def timeline(rows: list[dict]) -> str:
+    return "<p>" + "<br>".join(html.escape(f'{r["period"]} {r["text"]}'.strip()) for r in rows) + "</p>"
+
+
 def lists(groups: list[dict]) -> str:
     return "\n".join(block(g["title"], f'<p>{"、".join(html.escape(x) for x in g["items"])}</p>') for g in groups)
 
@@ -99,8 +103,9 @@ def main() -> None:
 
     top_body = "\n".join(
         [
-            f'<p>{html.escape(site["lead"])}</p>',
-            f'<p>{"<br>".join(html.escape(r) for r in site["roles"])}</p>',
+            f'<p>{html.escape(site["name"])}。{html.escape(site["lead"])}</p>',
+            timeline(site["history"]),
+            timeline(site["roles"]),
             links(site["links"]),
             block("仕事", f'<p>{html.escape(site["job"])}</p>'),
             lists(site["likes"]),
