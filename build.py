@@ -62,10 +62,12 @@ def links(items: list[dict]) -> str:
 
 
 def profile_section(site: dict) -> str:
+    # 狭い画面では「を」のあとで改行できるようにする。表示上の文言は変えない。
+    motto = html.escape(site["motto"]).replace("を", "を<wbr>", 1)
     return "\n".join(
         [
             '<section class="profile">',
-            f'<p class="catchphrase">{html.escape(site["motto"])}</p>',
+            f'<p class="catchphrase">{motto}</p>',
             block("住んだ場所", timeline(site["history"])),
             block("肩書き", timeline(site["roles"])),
             "</section>",
