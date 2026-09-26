@@ -61,6 +61,18 @@ def links(items: list[dict]) -> str:
     return f'<p>{" / ".join(link(x["label"], x["url"]) for x in items)}</p>'
 
 
+def profile_section(site: dict) -> str:
+    return "\n".join(
+        [
+            '<section class="profile">',
+            f'<p class="catchphrase">{html.escape(site["motto"])}</p>',
+            block("住んだ場所", timeline(site["history"])),
+            block("肩書き", timeline(site["roles"])),
+            "</section>",
+        ]
+    )
+
+
 def music(site: dict) -> str:
     name = html.escape(site["playlist_name"])
     return (
@@ -115,6 +127,7 @@ def main() -> None:
             lists([site["dreams"]]),
             block("ほしいもの", f'<p>{link("Amazon のほしい物リスト", site["wishlist_url"])}</p>'),
             lists([site["wanted"]]),
+            profile_section(site),
         ]
     )
     index = render_page(
