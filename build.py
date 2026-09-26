@@ -62,7 +62,7 @@ def links(items: list[dict]) -> str:
     return f'<p>{" / ".join(link(x["label"], x["url"]) for x in items)}</p>'
 
 
-def profile_section(site: dict) -> str:
+def intro_paragraph(site: dict) -> str:
     intro = site["profile_intro"]
     if intro.count(BIRTHDAY_PHRASE) != 1:
         raise SystemExit(f"プロフィール文に「{BIRTHDAY_PHRASE}」が1箇所ありません")
@@ -72,10 +72,13 @@ def profile_section(site: dict) -> str:
         f'<a href="{html.escape(page)}">{BIRTHDAY_PHRASE}</a>',
         1,
     )
+    return f"<p>{linked}</p>"
+
+
+def profile_section(site: dict) -> str:
     return "\n".join(
         [
             '<section class="profile">',
-            f"<p>{linked}</p>",
             block("住んだ場所", timeline(site["history"])),
             block("肩書き", timeline(site["roles"])),
             "</section>",
@@ -125,11 +128,12 @@ def main() -> None:
 
     top_body = "\n".join(
         [
+            intro_paragraph(site),
             links(site["links"]),
-            block("仕事", f'<p>{html.escape(site["job"])}</p>'),
             lists(site["likes"]),
             block(POSTS_TITLE, f'<p>X の投稿から選んだ<a href="{POSTS_PAGE}">{len(posts)}件</a>。</p>'),
             block("音楽", music(site)),
+            block("仕事", f'<p>{html.escape(site["job"])}</p>'),
             lists([site["dreams"]]),
             block("ほしいもの", f'<p>{link("Amazon のほしい物リスト", site["wishlist_url"])}</p>'),
             lists([site["wanted"]]),
