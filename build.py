@@ -10,7 +10,6 @@ ROOT = Path(__file__).parent
 DATA = ROOT / "data"
 POSTS_PAGE = "posts.html"
 POSTS_TITLE = "好きな自分のポスト"
-BIRTHDAY_PHRASE = "1999年5月16日生まれ"
 
 
 def read_json(name: str) -> dict | list:
@@ -63,16 +62,7 @@ def links(items: list[dict]) -> str:
 
 
 def intro_paragraph(site: dict) -> str:
-    intro = site["profile_intro"]
-    if intro.count(BIRTHDAY_PHRASE) != 1:
-        raise SystemExit(f"プロフィール文に「{BIRTHDAY_PHRASE}」が1箇所ありません")
-    page = site["birthday"]["page"]
-    linked = html.escape(intro).replace(
-        BIRTHDAY_PHRASE,
-        f'<a href="{html.escape(page)}">{BIRTHDAY_PHRASE}</a>',
-        1,
-    )
-    return f"<p>{linked}</p>"
+    return f'<p>{html.escape(site["profile_intro"])}</p>'
 
 
 def profile_section(site: dict) -> str:
@@ -132,7 +122,7 @@ def main() -> None:
             links(site["links"]),
             lists(site["likes"]),
             block(POSTS_TITLE, f'<p>X の投稿から選んだ<a href="{POSTS_PAGE}">{len(posts)}件</a>。</p>'),
-            block("音楽", music(site)),
+            block("好きな音楽", music(site)),
             block("仕事", f'<p>{html.escape(site["job"])}</p>'),
             lists([site["dreams"]]),
             block("ほしいもの", f'<p>{link("Amazon のほしい物リスト", site["wishlist_url"])}</p>'),
@@ -172,29 +162,7 @@ def main() -> None:
         },
     )
     (ROOT / POSTS_PAGE).write_text(posts_page, encoding="utf-8")
-
-    birthday = site["birthday"]
-    birthday_body = (
-        f"<p>{html.escape(birthday['text'])}</p>"
-        f'<p><a href="./">{html.escape(site["title"])} に戻る</a></p>'
-    )
-    birthday_page = render_page(
-        site,
-        template,
-        {
-            "TITLE": birthday["title"],
-            "PAGE": birthday["page"],
-            "H1": birthday["title"],
-            "UPDATED": "",
-            "BODY": birthday_body,
-            "LIGHTBOX_DATA": "{}",
-        },
-    )
-    (ROOT / birthday["page"]).write_text(birthday_page, encoding="utf-8")
-    print(
-        f"index.html: {len(site['likes'])} lists / {POSTS_PAGE}: {len(posts)} posts / "
-        f"{birthday['page']} / 最終更新 {updated}"
-    )
+    print(f"index.html: {len(site['likes'])} lists / {POSTS_PAGE}: {len(posts)} posts / 最終更新 {updated}")
 
 
 if __name__ == "__main__":
