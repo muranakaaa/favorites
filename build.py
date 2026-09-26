@@ -69,7 +69,6 @@ def profile_section(site: dict) -> str:
     return "\n".join(
         [
             '<section class="profile">',
-            block("住んだ場所", timeline(site["history"])),
             block("肩書き", timeline(site["roles"])),
             "</section>",
         ]
@@ -124,7 +123,6 @@ def main() -> None:
             block(POSTS_TITLE, f'<p>X の投稿から選んだ<a href="{POSTS_PAGE}">{len(posts)}件</a>。</p>'),
             block("好きな音楽", music(site)),
             block("仕事", f'<p>{html.escape(site["job"])}</p>'),
-            lists([site["dreams"]]),
             block("ほしいもの", f'<p>{link("Amazon のほしい物リスト", site["wishlist_url"])}</p>'),
             lists([site["wanted"]]),
             profile_section(site),
